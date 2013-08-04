@@ -24,6 +24,7 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Utilities;
 
@@ -31,7 +32,7 @@ namespace Newtonsoft.Json.Schema
 {
   internal class JsonSchemaModel
   {
-    public bool Required { get; set; }
+    public IList<string> Required { get; set; }
     public JsonSchemaType Type { get; set; }
     public int? MinimumLength { get; set; }
     public int? MaximumLength { get; set; }
@@ -60,7 +61,7 @@ namespace Newtonsoft.Json.Schema
       Type = JsonSchemaType.Any;
       AllowAdditionalProperties = true;
       AllowAdditionalItems = true;
-      Required = false;
+      Required = null;
     }
 
     public static JsonSchemaModel Create(IList<JsonSchema> schemata)
@@ -78,7 +79,20 @@ namespace Newtonsoft.Json.Schema
     private static void Combine(JsonSchemaModel model, JsonSchema schema)
     {
       // Version 3 of the Draft JSON Schema has the default value of Not Required
+
+      /* STH:
       model.Required = model.Required || (schema.Required ?? false);
+       */
+      if (schema.Required != null)
+      {
+        var required = schema.Required.Select(t => (string)t).Distinct().ToList();
+
+        if (model.Required != null)
+          model.Required.AddRangeDistinct(required, null);
+        else
+          model.Required = required;
+      }
+
       model.Type = model.Type & (schema.Type ?? JsonSchemaType.Any);
 
       model.MinimumLength = MathUtils.Max(model.MinimumLength, schema.MinimumLength);

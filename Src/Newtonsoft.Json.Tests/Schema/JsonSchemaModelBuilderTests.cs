@@ -146,11 +146,12 @@ namespace Newtonsoft.Json.Tests.Schema
       string schemaJson = @"{
   ""description"":""A person"",
   ""type"":""object"",
+  ""required"": [ ""hobbies"", ""age"" ],
   ""properties"":
   {
     ""name"":{""type"":""string""},
-    ""hobbies"":{""type"":""string"",required:true},
-    ""age"":{""type"":""integer"",required:true}
+    ""hobbies"":{""type"":""string""},
+    ""age"":{""type"":""integer""}
   }
 }";
 
@@ -160,9 +161,9 @@ namespace Newtonsoft.Json.Tests.Schema
 
       Assert.AreEqual(JsonSchemaType.Object, model.Type);
       Assert.AreEqual(3, model.Properties.Count);
-      Assert.AreEqual(false, model.Properties["name"].Required);
-      Assert.AreEqual(true, model.Properties["hobbies"].Required);
-      Assert.AreEqual(true, model.Properties["age"].Required);
+      Assert.IsFalse(model.Required.Contains("name"));
+      Assert.IsTrue(model.Required.Contains("hobbies"));
+      Assert.IsTrue(model.Required.Contains("age"));
     }
   }
 }

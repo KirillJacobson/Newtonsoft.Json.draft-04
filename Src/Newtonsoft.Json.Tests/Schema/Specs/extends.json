@@ -2,10 +2,12 @@
     {
         "description": "extends",
         "schema": {
-            "properties": {"bar": {"type": "integer", "required": true}},
+            "required": [ "bar" ],
+            "properties": {"bar": {"type": "integer"}},
             "extends": {
+                "required": [ "foo" ],
                 "properties": {
-                    "foo": {"type": "string", "required": true}
+                    "foo": {"type": "string"}
                 }
             }
         },
@@ -35,16 +37,19 @@
     {
         "description": "multiple extends",
         "schema": {
-            "properties": {"bar": {"type": "integer", "required": true}},
+            "required": [ "bar" ],
+            "properties": {"bar": {"type": "integer"}},
             "extends" : [
                 {
+                    "required": [ "foo", "bar" ],
                     "properties": {
-                        "foo": {"type": "string", "required": true}
+                        "foo": {"type": "string"}
                     }
                 },
                 {
+                    "required": [ "baz" ],
                     "properties": {
-                        "baz": {"type": "null", "required": true}
+                        "baz": {"type": "null"}
                     }
                 }
             ]

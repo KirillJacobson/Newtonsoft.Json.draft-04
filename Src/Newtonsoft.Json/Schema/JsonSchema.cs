@@ -48,7 +48,7 @@ namespace Newtonsoft.Json.Schema
     /// <summary>
     /// Gets or sets whether the object is required.
     /// </summary>
-    public bool? Required { get; set; }
+    public IList<JToken> Required { get; set; }
     /// <summary>
     /// Gets or sets whether the object is read only.
     /// </summary>

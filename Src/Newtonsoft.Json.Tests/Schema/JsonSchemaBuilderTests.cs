@@ -124,14 +124,15 @@ namespace Newtonsoft.Json.Tests.Schema
     {
       string json = @"{
   ""description"":""Required"",
-  ""required"":true
+  ""required"": [ ""description"" ]
 }";
 
       JsonSchemaBuilder builder = new JsonSchemaBuilder(new JsonSchemaResolver());
       JsonSchema schema = builder.Read(new JsonTextReader(new StringReader(json)));
 
       Assert.AreEqual("Required", schema.Description);
-      Assert.AreEqual(true, schema.Required);
+      Assert.AreEqual(1, schema.Required.Count);
+      Assert.AreEqual("description", (string)schema.Required[0]);
     }
 
     [Test]
@@ -237,21 +238,6 @@ namespace Newtonsoft.Json.Tests.Schema
 
       Assert.AreEqual("Format", schema.Description);
       Assert.AreEqual("testformat", schema.Format);
-    }
-
-    [Test]
-    public void Requires()
-    {
-      string json = @"{
-  ""description"":""Requires"",
-  ""requires"":""PurpleMonkeyDishwasher""
-}";
-
-      JsonSchemaBuilder builder = new JsonSchemaBuilder(new JsonSchemaResolver());
-      JsonSchema schema = builder.Read(new JsonTextReader(new StringReader(json)));
-
-      Assert.AreEqual("Requires", schema.Description);
-      Assert.AreEqual("PurpleMonkeyDishwasher", schema.Requires);
     }
 
     [Test]

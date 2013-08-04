@@ -958,11 +958,12 @@ namespace Newtonsoft.Json.Tests
       string schemaJson = @"{
   ""description"":""A person"",
   ""type"":""object"",
+  ""required"": [ ""hobbies"", ""age"" ],
   ""properties"":
   {
     ""name"":{""type"":""string""},
-    ""hobbies"":{""type"":""string"",""required"":true},
-    ""age"":{""type"":""integer"",""required"":true}
+    ""hobbies"":{""type"":""string""},
+    ""age"":{""type"":""integer""}
   }
 }";
 
@@ -1000,10 +1001,11 @@ namespace Newtonsoft.Json.Tests
       string schemaJson = @"{
   ""description"":""A person"",
   ""type"":""object"",
+  ""required"": [ ""name"" ],
   ""properties"":
   {
-    ""name"":{""type"":""string"",""required"":true},
-    ""hobbies"":{""type"":""string"",""required"":false},
+    ""name"":{""type"":""string""},
+    ""hobbies"":{""type"":""string""},
     ""age"":{""type"":""integer""}
   }
 }";
@@ -1129,9 +1131,10 @@ namespace Newtonsoft.Json.Tests
       string first = @"{
   ""id"":""first"",
   ""type"":""object"",
+  ""required"": [ ""firstproperty"" ],
   ""properties"":
   {
-    ""firstproperty"":{""type"":""string"",""required"":true}
+    ""firstproperty"":{""type"":""string""}
   },
   ""additionalProperties"":{}
 }";
@@ -1140,9 +1143,10 @@ namespace Newtonsoft.Json.Tests
   ""id"":""second"",
   ""type"":""object"",
   ""extends"":{""$ref"":""first""},
+  ""required"": [ ""secondproperty"" ],
   ""properties"":
   {
-    ""secondproperty"":{""type"":""string"",""required"":true}
+    ""secondproperty"":{""type"":""string""}
   },
   ""additionalProperties"":false
 }";
@@ -1477,50 +1481,43 @@ namespace Newtonsoft.Json.Tests
     {
       string schema = @"{
   ""id"":""ErrorDemo.Database"",
+  ""required"": [ ""ErrorDemoDatabase"" ],
   ""properties"":{
     ""ErrorDemoDatabase"":{
       ""type"":""object"",
-      ""required"":true,
+      ""required"": [ ""URL"", ""Version"", ""Date"", ""MACLevels"" ],
       ""properties"":{
         ""URL"":{
-          ""type"":""string"",
-          ""required"":true
+          ""type"":""string""
         },
         ""Version"":{
-          ""type"":""string"",
-          ""required"":true
+          ""type"":""string""
         },
         ""Date"":{
           ""type"":""string"",
-          ""format"":""date-time"",
-          ""required"":true
+          ""format"":""date-time""
         },
         ""MACLevels"":{
           ""type"":""object"",
-          ""required"":true,
+          ""required"": [ ""MACLevel"" ],
           ""properties"":{
             ""MACLevel"":{
               ""type"":""array"",
-              ""required"":true,
               ""items"":[
                 {
-                  ""required"":true,
+                  ""required"": [ ""IDName"", ""Order"", ""IDDesc"", ""IsActive"" ],
                   ""properties"":{
                     ""IDName"":{
-                      ""type"":""string"",
-                      ""required"":true
+                      ""type"":""string""
                     },
                     ""Order"":{
-                      ""type"":""string"",
-                      ""required"":true
+                      ""type"":""string""
                     },
                     ""IDDesc"":{
-                      ""type"":""string"",
-                      ""required"":true
+                      ""type"":""string""
                     },
                     ""IsActive"":{
-                      ""type"":""string"",
-                      ""required"":true
+                      ""type"":""string""
                     }
                   }
                 }
@@ -1589,6 +1586,7 @@ namespace Newtonsoft.Json.Tests
       }
 
       Assert.AreEqual(1, validationEventArgs.Count);
+      Assert.AreEqual("Required properties are missing from object: IDName. Line 13, position 10.", validationEventArgs[0].Message);
     }
 
     [Test]

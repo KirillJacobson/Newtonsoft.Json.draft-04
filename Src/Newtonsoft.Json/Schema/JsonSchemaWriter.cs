@@ -72,7 +72,6 @@ namespace Newtonsoft.Json.Schema
       WritePropertyIfNotNull(_writer, JsonSchemaConstants.IdPropertyName, schema.Id);
       WritePropertyIfNotNull(_writer, JsonSchemaConstants.TitlePropertyName, schema.Title);
       WritePropertyIfNotNull(_writer, JsonSchemaConstants.DescriptionPropertyName, schema.Description);
-      WritePropertyIfNotNull(_writer, JsonSchemaConstants.RequiredPropertyName, schema.Required);
       WritePropertyIfNotNull(_writer, JsonSchemaConstants.ReadOnlyPropertyName, schema.ReadOnly);
       WritePropertyIfNotNull(_writer, JsonSchemaConstants.HiddenPropertyName, schema.Hidden);
       WritePropertyIfNotNull(_writer, JsonSchemaConstants.TransientPropertyName, schema.Transient);
@@ -104,7 +103,16 @@ namespace Newtonsoft.Json.Schema
           ReferenceOrWriteSchema(schema.AdditionalItems);
         }
       }
-      WriteSchemaDictionaryIfNotNull(_writer, JsonSchemaConstants.PropertiesPropertyName, schema.Properties);
+      if (schema.Required != null)
+      {
+        _writer.WritePropertyName(JsonSchemaConstants.RequiredPropertyName);
+        _writer.WriteStartArray();
+        foreach (var token in schema.Required)
+        {
+          token.WriteTo(_writer);
+        }
+        _writer.WriteEndArray();
+      } WriteSchemaDictionaryIfNotNull(_writer, JsonSchemaConstants.PropertiesPropertyName, schema.Properties);
       WriteSchemaDictionaryIfNotNull(_writer, JsonSchemaConstants.PatternPropertiesPropertyName, schema.PatternProperties);
       WriteItems(schema);
       WritePropertyIfNotNull(_writer, JsonSchemaConstants.MinimumPropertyName, schema.Minimum);

@@ -159,7 +159,7 @@ namespace Newtonsoft.Json.Schema
 
       _resolver = resolver;
 
-      return GenerateInternal(type, (!rootSchemaNullable) ? Required.Always : Required.Default, false);
+      return GenerateInternal(type, (!rootSchemaNullable) ? Required.Always : Required.Default);
     }
 
     private string GetTitle(Type type)
@@ -209,7 +209,7 @@ namespace Newtonsoft.Json.Schema
       }
     }
 
-    private JsonSchema GenerateInternal(Type type, Required valueRequired, bool required)
+    private JsonSchema GenerateInternal(Type type, Required valueRequired)
     {
       ValidationUtils.ArgumentNotNull(type, "type");
 
@@ -225,8 +225,10 @@ namespace Newtonsoft.Json.Schema
           // change resolved schema to allow nulls. hacky but what are ya gonna do?
           if (valueRequired != Required.Always && !HasFlag(resolvedSchema.Type, JsonSchemaType.Null))
             resolvedSchema.Type |= JsonSchemaType.Null;
+/* STH:
           if (required && resolvedSchema.Required != true)
             resolvedSchema.Required = true;
+ */
 
           return resolvedSchema;
         }
@@ -252,8 +254,6 @@ namespace Newtonsoft.Json.Schema
       if (explicitId != null)
         CurrentSchema.Id = explicitId;
 
-      if (required)
-        CurrentSchema.Required = true;
       CurrentSchema.Title = GetTitle(type);
       CurrentSchema.Description = GetDescription(type);
 
@@ -283,7 +283,7 @@ namespace Newtonsoft.Json.Schema
             if (collectionItemType != null)
             {
               CurrentSchema.Items = new List<JsonSchema>();
-              CurrentSchema.Items.Add(GenerateInternal(collectionItemType, (!allowNullItem) ? Required.Always : Required.Default, false));
+              CurrentSchema.Items.Add(GenerateInternal(collectionItemType, (!allowNullItem) ? Required.Always : Required.Default));
             }
             break;
           case JsonContractType.Primitive:
@@ -323,7 +323,7 @@ namespace Newtonsoft.Json.Schema
               // can be converted to a string
               if (keyContract.ContractType == JsonContractType.Primitive)
               {
-                CurrentSchema.AdditionalProperties = GenerateInternal(valueType, Required.Default, false);
+                CurrentSchema.AdditionalProperties = GenerateInternal(valueType, Required.Default);
               }
             }
             break;
@@ -373,7 +373,16 @@ namespace Newtonsoft.Json.Schema
                           property.ShouldSerialize != null ||
                           property.GetIsSpecified != null;
 
-          JsonSchema propertySchema = GenerateInternal(property.PropertyType, property.Required, !optional);
+          // STH:
+          if (!optional)
+          {
+            if (CurrentSchema.Required == null)
+              CurrentSchema.Required = new List<JToken>();
+
+            CurrentSchema.Required.Add(property.PropertyName);
+          }
+
+          JsonSchema propertySchema = GenerateInternal(property.PropertyType, property.Required);
 
           if (property.DefaultValue != null)
             propertySchema.Default = JToken.FromObject(property.DefaultValue);

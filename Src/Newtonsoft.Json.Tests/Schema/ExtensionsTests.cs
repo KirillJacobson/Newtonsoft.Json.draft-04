@@ -104,7 +104,7 @@ namespace Newtonsoft.Json.Tests.Schema
     [Test]
     public void ValidateFailureWithOutLineInfoBecauseOfEndToken()
     {
-      JsonSchema schema = JsonSchema.Parse("{'properties':{'lol':{'required':true}}}");
+      JsonSchema schema = JsonSchema.Parse("{'required':['lol'], 'properties':{'lol':{}}}");
       JObject o = JObject.Parse("{}");
 
       List<string> errors = new List<string>();

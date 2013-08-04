@@ -91,10 +91,17 @@ namespace Newtonsoft.Json
 
       private IEnumerable<string> GetRequiredProperties(JsonSchemaModel schema)
       {
+        /* STH:
         if (schema == null || schema.Properties == null)
           return Enumerable.Empty<string>();
 
         return schema.Properties.Where(p => p.Value.Required).Select(p => p.Key);
+         */
+
+        if (schema == null || schema.Required == null)
+          return Enumerable.Empty<string>();
+
+        return schema.Required;
       }
 
     }
