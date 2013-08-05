@@ -377,7 +377,7 @@ namespace Newtonsoft.Json.Schema
           if (!optional)
           {
             if (CurrentSchema.Required == null)
-              CurrentSchema.Required = new List<JToken>();
+              CurrentSchema.Required = new List<string>();
 
             CurrentSchema.Required.Add(property.PropertyName);
           }

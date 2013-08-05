@@ -107,9 +107,9 @@ namespace Newtonsoft.Json.Schema
       {
         _writer.WritePropertyName(JsonSchemaConstants.RequiredPropertyName);
         _writer.WriteStartArray();
-        foreach (var token in schema.Required)
+        foreach (var item in schema.Required)
         {
-          token.WriteTo(_writer);
+          _writer.WriteValue(item);
         }
         _writer.WriteEndArray();
       } WriteSchemaDictionaryIfNotNull(_writer, JsonSchemaConstants.PropertiesPropertyName, schema.Properties);

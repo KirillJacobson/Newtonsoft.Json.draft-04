@@ -361,14 +361,14 @@ namespace Newtonsoft.Json.Schema
       if (!token.Any())
           throw JsonException.Create(token, token.Path, "The value of 'required' keyword must be an array with at least one element.");
 
-      CurrentSchema.Required = new List<JToken>();
+      CurrentSchema.Required = new List<string>();
 
       foreach (var required in token)
       {
         if (required.Type != JTokenType.String)
           throw JsonException.Create(required, required.Path, "Expected a string, got {0}.".FormatWith(CultureInfo.InvariantCulture, token.Type));
 
-        CurrentSchema.Required.Add(required.DeepClone());
+        CurrentSchema.Required.Add((string)required);
       }
     }
 
