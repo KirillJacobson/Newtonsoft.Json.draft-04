@@ -729,9 +729,16 @@ namespace Newtonsoft.Json.Linq
             // handle multiple properties with the same name in JSON
             JProperty existingPropertyWithName = parentObject.Property(propertyName);
             if (existingPropertyWithName == null)
+            {
               parent.Add(property);
+            }
             else
+            {
+              if (JsonReaderSettings.DuplicateKeysHandling == DuplicateKeysHandling.Prevent)
+                throw new JsonException("Duplicate key name '{0}'.".FormatWith(CultureInfo.InvariantCulture, propertyName));
+
               existingPropertyWithName.Replace(property);
+            }
             parent = property;
             break;
           default:

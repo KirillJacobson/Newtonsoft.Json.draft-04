@@ -107,6 +107,7 @@
     <Compile Include="Converters\StringEnumConverter.cs" />
     <Compile Include="ConstructorHandling.cs" />
     <Compile Include="Converters\VersionConverter.cs" />
+    <Compile Include="DuplicateKeysHandling.cs" />
     <Compile Include="FloatFormatHandling.cs" />
     <Compile Include="FloatParseHandling.cs" />
     <Compile Include="JsonDictionaryAttribute.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="JsonConstructorAttribute.cs" />
     <Compile Include="JsonExtensionDataAttribute.cs" />
     <Compile Include="JsonPosition.cs" />
+    <Compile Include="JsonReaderSettings.cs" />
     <Compile Include="Linq\JPropertyKeyedCollection.cs" />
     <Compile Include="Serialization\DiagnosticsTraceWriter.cs" />
     <Compile Include="Serialization\ExpressionValueProvider.cs" />
